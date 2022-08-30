@@ -153,7 +153,7 @@ class Holiday_List:
             else:
                 print("Invalid input, expecting 'y' or 'n'.")
 
-def option_one(hol_list_list):
+def option_one(hol_list_inst):
     print("\n\nAdd a Holiday\n=============")
     hol_name = input("Holiday Name: ").strip()
     valid = 'n'
@@ -163,17 +163,17 @@ def option_one(hol_list_list):
             hol_date = datetime.datetime.strptime(hol_date_inp, '%Y-%m-%d').date()
             valid = 'y'
             print("\nSuccess:")
-            hol_list_list.add_holiday(Holiday(hol_name, hol_date))
+            hol_list_inst.add_holiday(Holiday(hol_name, hol_date))
         except ValueError:
             print("\nError:\nInvalid date. Ensure that the proper format is followed (YYYY-MM-DD).\nPlease try again.\n")
 
-def option_two(hol_list_list):
+def option_two(hol_list_inst):
     print("\n\nRemove a Holiday\n================")
     found = 'n'
     while found == 'n':
         hol_name = input("Holiday Name: ").strip()
         print("")
-        filt_hol = list(filter(lambda hol: hol.name == hol_name, hol_list_list))
+        filt_hol = list(filter(lambda hol: hol.name == hol_name, hol_list_inst.inner_holidays))
         if filt_hol != []:
             found = 'y'
             for hol in filt_hol:
@@ -181,8 +181,8 @@ def option_two(hol_list_list):
                 print(clean)
             hol_year = int(input("\nHoliday Year: ").strip())
             chosen_hol = list(filter(lambda hol: hol.date.isocalendar().year == hol_year, filt_hol))
-            index = hol_list_list.index(chosen_hol[0])
-            hol_list_list.remove(hol_list_list[index])
+            index = hol_list_inst.inner_holidays.index(chosen_hol[0])
+            hol_list_inst.inner_holidays.remove(hol_list_inst.inner_holidays[index])
             print(f"\nSuccess:\n{chosen_hol[0].name} has been removed from the list.\n")
         else:
             print(f"\nError:\n{hol_name} not found.\n")
@@ -285,10 +285,10 @@ def main():
         # Takes user input for their action based on Menu and check the user input for errors
         choice = input("Make a selection: ")
         if choice == "1":
-            option_one(hol_list.inner_holidays)
+            option_one(hol_list)
             saved = 'n'
         elif choice == "2":
-            option_two(hol_list.inner_holidays)
+            option_two(hol_list)
             saved = 'n'
         elif choice == "3":
             option_three(hol_list)
